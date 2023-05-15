@@ -68,15 +68,15 @@ DSString& DSString::operator=(const DSString& dstr) {
 *   @param: dstr DSString variable to compare
 */
 bool DSString::operator==(const char* str) const {
-    return strcmp(this->str, str) == 0;
+    return (strcmp(this->str, str) == 0);
 }
 
 bool DSString::operator==(const std::string& str) const {
-    return strcmp(this->str, str.c_str()) == 0;
+    return (strcmp(this->str, str.c_str()) == 0);
 }
 
 bool DSString::operator==(const DSString& dstr) const {
-    return strcmp(this->str, dstr.str) == 0;
+    return (strcmp(this->str, dstr.str) == 0);
 }
 
 /*  Overloaded non equality methods
@@ -92,15 +92,15 @@ bool DSString::operator==(const DSString& dstr) const {
 *   @param: dstr DSString variable to compare
 */
 bool DSString::operator!=(const char* str) const {
-    return strcmp(this->str, str) != 0;
+    return (strcmp(this->str, str) != 0);
 }
 
 bool DSString::operator!=(const std::string& str) const {
-    return strcmp(this->str, str.c_str()) != 0;
+    return (strcmp(this->str, str.c_str()) != 0);
 }
 
 bool DSString::operator!=(const DSString& dstr) const {
-    return strcmp(this->str, dstr.str) != 0;
+    return (strcmp(this->str, dstr.str) != 0);
 }
 
 /*  Overloaded less than methods
@@ -116,15 +116,15 @@ bool DSString::operator!=(const DSString& dstr) const {
 *   @param: dstr DSString variable to compare
 */
 bool DSString::operator<(const char* str) const {
-    return (this->str < str) == 1;
+    return (strcmp(this->str, str) < 0);
 }
 
 bool DSString::operator<(const std::string& str) const {
-    return (this->str < str.c_str()) == 1;
+    return (strcmp(this->str, str.c_str()) < 0);
 }
 
 bool DSString::operator<(const DSString& dstr) const {
-    return (this->str < dstr.str) == 1;
+    return (strcmp(this->str, dstr.str) < 0);
 }
 
 /*  Overloaded greater than methods
@@ -140,20 +140,20 @@ bool DSString::operator<(const DSString& dstr) const {
 *   @param: dstr DSString variable to compare
 */
 bool DSString::operator>(const char* str) const {
-    return (this->str > str) == 1;
+    return (strcmp(this->str, str) > 0);
 }
 
 bool DSString::operator>(const std::string& str) const {
-    return (this->str > str.c_str()) == 1;
+    return (strcmp(this->str, str.c_str()) > 0);
 }
 
 bool DSString::operator>(const DSString& dstr) const {
-    return (this->str > dstr.str) == 1;
+    return (strcmp(this->str, dstr.str) > 0);
 }
 
 // overloaded subscript operator
 char& DSString::operator[](const int& index) const {
-    if (index > 0 && index < (strlen(this->str)-1)) {
+    if (index > -1 && index < (strlen(this->str)-1)) {
         return this->str[index];
     } else {
         std::cout << "Invalid index!" << std::endl;
@@ -178,6 +178,7 @@ DSString DSString::operator+(const DSString& dstr) {
     return word;
 }
 
+// method to make a substring from a DSString
 DSString DSString::substr(const int& start, const int& numChars) {
     if (start < 0 || start > this->getSize()) {
         std::cout << "Start index out of bounds" << std::endl;
