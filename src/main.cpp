@@ -1,19 +1,18 @@
 #define CATCH_CONFIG_RUNNER
 
-#include <iostream>
-
 #include "test/catch.hpp"
-#include "DSString.h"
+#include "Sentiment_Analyzer.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
-    Catch::Session().run();
 
-    DSString dummy1("This is a string");
-    DSString dummy2("This is another string");
+    if (argc > 1) {
+        Sentiment_Analyzer p1(argv[1], nullptr, nullptr, nullptr);
+        p1.read_training_file();
 
-    //cout << (dummy1 < dummy2) << endl;
-
+    } else {
+        Catch::Session().run();
+    }
     return 0;
 }
