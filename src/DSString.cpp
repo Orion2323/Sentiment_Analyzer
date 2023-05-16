@@ -257,3 +257,8 @@ char* DSString::c_str() const {
         return this->str;
     }
 }
+
+std::ostream& operator<<(std::ostream& inOF, const DSString& dstr) {
+    inOF << dstr.str;
+    return inOF;
+}

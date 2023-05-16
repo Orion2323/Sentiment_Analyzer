@@ -1,5 +1,9 @@
+#ifndef SENTIMENT_ANALYZER_DSSTRING_H
+#define SENTIMENT_ANALYZER_DSSTRING_H
+
 #include <iostream>
 #include <cstring>
+#include <fstream>
 
 class DSString {
 private:
@@ -107,4 +111,8 @@ public:
     DSString substr(const int& start, const int& numChars);
     int getSize() const;
     char* c_str() const;
+
+    friend std::ostream& operator<<(std::ostream& inOF, const DSString& dstr);
 };
+
+#endif //SENTIMENT_ANALYZER_DSSTRING_H
