@@ -1,18 +1,8 @@
 #include "DSString.h"
 
-/*  Constructors
-*   
-*   first: default
-*   
-*   second: 
-*   @params: str: char pointer
-*
-*   Third:
-*   @param: str: string variable 
-*/
+// default constructor
 DSString::DSString() {
-    this->str = new char[1];
-    this->str[0] = '\0';
+    this->str = nullptr;
 }
 
 DSString::DSString(const char* str) {
@@ -20,20 +10,23 @@ DSString::DSString(const char* str) {
         this->str = new char[strlen(str) + 1];
         strcpy(this->str, str);
     } else {
-        this->str = new char[1];
-        this->str[0] = '\0';
+        this->str == nullptr;
     }
 }
 
 DSString::DSString(const std::string& str) {
-    this->str = new char [str.size() + 1];
-    strcpy(this->str, str.c_str());
+    if (str.c_str() != nullptr) {
+        this->str = new char [str.size() + 1];
+        strcpy(this->str, str.c_str());
+    } else {
+        this->str = nullptr;
+    }
 } 
 
 // destructor
 DSString::~DSString() {
     if (this->str != nullptr) {
-        delete this->str;
+        delete[] this->str;
     }
 }
 
@@ -46,114 +39,154 @@ DSString::DSString(const DSString& dstr) {
 // assignment operator
 DSString& DSString::operator=(const DSString& dstr) {
     if (this->str != nullptr) {
-        delete this->str;
+        delete[] this->str;
     }
 
-    this->str = new char[strlen(dstr.str) + 1];
-    strcpy(this->str, dstr.str);
+    if (dstr.str != nullptr) {
+        this->str = new char[strlen(dstr.str) + 1];
+        strcpy(this->str, dstr.str);
+    } else {
+        this->str = nullptr;
+    }
 
     return *this;
 }
 
-/*  Overloaded equality methods
-*   Returns a boolean if current DSString exactly like parameter variable
-* 
-*   first:
-*   @params: str char pointer to compare 
-*  
-*   second: 
-*   @params: str string varible to compare
-*
-*   Third:
-*   @param: dstr DSString variable to compare
-*/
 bool DSString::operator==(const char* str) const {
-    return (strcmp(this->str, str) == 0);
+    if (str == nullptr && this->str == nullptr) {
+        return true;
+    } else if (str == nullptr || this->str == nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, str) == 0);
+    }
 }
 
 bool DSString::operator==(const std::string& str) const {
-    return (strcmp(this->str, str.c_str()) == 0);
+    if (str.c_str() == nullptr && this->str == nullptr) {
+        return true;
+    } else if (str.c_str() == nullptr || this->str == nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, str.c_str()) == 0);
+    }
 }
 
 bool DSString::operator==(const DSString& dstr) const {
-    return (strcmp(this->str, dstr.str) == 0);
+    if (dstr.str == nullptr && this->str == nullptr) {
+        return true;
+    } else if (dstr.str == nullptr || this->str == nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, dstr.str) == 0);
+    }
 }
 
-/*  Overloaded non equality methods
-*   Returns a boolean if current DSString is not exactly like parameter variable
-*
-*   first:
-*   @params: str char pointer to compare
-*
-*   second:
-*   @params: str string varible to compare
-*
-*   Third:
-*   @param: dstr DSString variable to compare
-*/
 bool DSString::operator!=(const char* str) const {
-    return (strcmp(this->str, str) != 0);
+    if (str == nullptr && this->str == nullptr) {
+        return false;
+    } else if (str == nullptr || this->str == nullptr) {
+        return true;
+    } else {
+        return (strcmp(this->str, str) != 0);
+    }
 }
 
 bool DSString::operator!=(const std::string& str) const {
-    return (strcmp(this->str, str.c_str()) != 0);
+    if (str.c_str() == nullptr && this->str == nullptr) {
+        return false;
+    } else if (str.c_str() == nullptr || this->str == nullptr) {
+        return true;
+    } else {
+        return (strcmp(this->str, str.c_str()) != 0);
+    }
 }
 
 bool DSString::operator!=(const DSString& dstr) const {
-    return (strcmp(this->str, dstr.str) != 0);
+    if (dstr.str == nullptr && this->str == nullptr) {
+        return false;
+    } else if (dstr.str == nullptr || this->str == nullptr) {
+        return true;
+    } else {
+        return (strcmp(this->str, dstr.str) != 0);
+    }
 }
 
-/*  Overloaded less than methods
-*   Returns a boolean if current DSString is less than parameter variable
-* 
-*   first:
-*   @params: str char pointer to compare 
-*  
-*   second: 
-*   @params: str string varible to compare
-*
-*   Third:
-*   @param: dstr DSString variable to compare
-*/
 bool DSString::operator<(const char* str) const {
-    return (strcmp(this->str, str) < 0);
+    if (this->str == nullptr && str == nullptr) {
+        return false;
+    } else if (this->str != nullptr && str == nullptr) {
+        return true;
+    } else if (this->str == nullptr && str != nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, str) < 0);
+    }
 }
 
 bool DSString::operator<(const std::string& str) const {
-    return (strcmp(this->str, str.c_str()) < 0);
+    if (this->str == nullptr && str.c_str() == nullptr) {
+        return false;
+    } else if (this->str != nullptr && str.c_str() == nullptr) {
+        return true;
+    } else if (this->str == nullptr && str.c_str() != nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, str.c_str()) < 0);
+    }
 }
 
 bool DSString::operator<(const DSString& dstr) const {
-    return (strcmp(this->str, dstr.str) < 0);
+    if (this->str == nullptr && dstr.str != nullptr) {
+        return true;
+    } else if (this->str != nullptr && dstr.str == nullptr) {
+        return false;
+    } else if (this->str == nullptr && dstr.str == nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, dstr.str) < 0);
+    }
 }
 
-/*  Overloaded greater than methods
-*   Returns a boolean if current DSString is greater than parameter variable
-* 
-*   first:
-*   @params: str char pointer to compare 
-*  
-*   second: 
-*   @params: str string varible to compare
-*
-*   Third:
-*   @param: dstr DSString variable to compare
-*/
 bool DSString::operator>(const char* str) const {
-    return (strcmp(this->str, str) > 0);
+    if (this->str == nullptr && str == nullptr) {
+        return false;
+    } else if (this->str != nullptr && str == nullptr) {
+        return true;
+    } else if (this->str == nullptr && str != nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, str) > 0);
+    }
 }
 
 bool DSString::operator>(const std::string& str) const {
-    return (strcmp(this->str, str.c_str()) > 0);
+    if (this->str == nullptr && str.c_str() != nullptr) {
+        return false;
+    } else if (this->str != nullptr && str.c_str() == nullptr) {
+        return true;
+    } else if (this->str == nullptr && str.c_str() == nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str,str.c_str()) > 0);
+    }
 }
 
 bool DSString::operator>(const DSString& dstr) const {
-    return (strcmp(this->str, dstr.str) > 0);
+    if (this->str == nullptr && dstr.str != nullptr) {
+        return false;
+    } else if (this->str != nullptr && dstr.str == nullptr) {
+        return true;
+    } else if (this->str == nullptr && dstr.str == nullptr) {
+        return false;
+    } else {
+        return (strcmp(this->str, dstr.str) > 0);
+    }
 }
 
 // overloaded subscript operator
 char& DSString::operator[](const int& index) const {
-    if (index > -1 && index < (strlen(this->str)-1)) {
+    if (index > -1 && index <= (strlen(this->str)-1)) {
         return this->str[index];
     } else {
         std::cout << "Invalid index!" << std::endl;
@@ -190,6 +223,11 @@ DSString DSString::substr(const int& start, const int& numChars) {
 
         for (int i = 0; i < numChars; i++) {
             substr[i] = this->str[i + start];
+        }
+
+        // check if last char is a null temrinated character
+        if (substr[numChars] != '\0') {
+            substr[numChars] = '\0';
         }
 
         word = DSString(substr);
