@@ -24,8 +24,24 @@ public:
     explicit DSString(const std::string& str);
 
     // rule of 3
+    /** Destructor
+     * Ensures dynamic allocated memory is deallocated properly
+     */
     ~DSString();
+
+    /** Copy constructor
+     * Creates a constructor from another DSString obj
+     *
+     * @param dstr source DSString
+     */
     DSString(const DSString& dstr);
+
+    /** Assignment operator
+     * Sets a DSString equal to another DSString
+     *
+     * @param dstr source DSString
+     * @return reference to new DSString obj
+     */
     DSString& operator=(const DSString& dstr);
 
     /**  Overloaded equality methods
@@ -108,8 +124,28 @@ public:
      */
     DSString operator+(const DSString& dstr);
 
+    /** Substring method
+     * Creates a sub-DSString from DSString obj
+     *
+     * @param start starting index of sub-DSString
+     * @param numChars length of sub-DSString
+     * @return sub-DSString obj
+     */
     DSString substr(const int& start, const int& numChars);
+
+    /** Get Size method
+     * Returns size of DSString
+     *
+     * @return int holding size of DSString
+     */
     int getSize() const;
+
+    /** C-string method
+     * Gets char* from DSString
+     *
+     *
+     * @return char* holding contents of DSString
+     */
     char* c_str() const;
 
     friend std::ostream& operator<<(std::ostream& inOF, const DSString& dstr);
