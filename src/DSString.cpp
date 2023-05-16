@@ -10,7 +10,7 @@ DSString::DSString(const char* str) {
         this->str = new char[strlen(str) + 1];
         strcpy(this->str, str);
     } else {
-        this->str == nullptr;
+        this->str = nullptr;
     }
 }
 
@@ -198,14 +198,18 @@ DSString DSString::operator+(const DSString& dstr) {
     DSString word;
     char* add = nullptr;
 
-    if (dstr.str != nullptr) {
+    if (this->str != nullptr && dstr.str == nullptr) {
+        add = new char[strlen(this->str) + 1];
+        strcpy(add, this->str);
+    } else if (this->str == nullptr && dstr.str != nullptr) {
+        add = new char[strlen(dstr.str) + 1];
+        strcpy(add, dstr.str);
+    } else if (this->str != nullptr && dstr.str != nullptr){
         add = new char[this->getSize() + dstr.getSize() + 1];
         strcpy(add, this->str);
         strcat(add, dstr.str);
-    } else {
-        add = new char[this->getSize() + 1];
-        strcpy(add, this->str);
     }
+
     word = DSString(add);
     delete[] add;
     return word;
@@ -238,10 +242,18 @@ DSString DSString::substr(const int& start, const int& numChars) {
 
 // method for returning size of DSString
 int DSString::getSize() const {
-    return strlen(this->str);
+    if (this->str == nullptr) {
+        return 0;
+    } else {
+        return strlen(this->str);
+    }
 }
 
 // method for returning c_str of DSString
 char* DSString::c_str() const {
-    return this->str;
+    if (this->str == nullptr) {
+        std::cout << "DSString is empty!" << std::endl;
+    } else {
+        return this->str;
+    }
 }

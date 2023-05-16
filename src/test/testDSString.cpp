@@ -85,7 +85,44 @@ TEST_CASE("DSString class", "[DSString]") {
         REQUIRE(dummy3[6] == 'S');
     }
 
-    SECTION("Plus operator+ & substr() method") {
+    SECTION("Plus operator+") {
+        DSString dummy1("Add");
+        DSString dummy2("ition");
+
+        DSString dummy3 = dummy1 + dummy2;
+        REQUIRE(dummy3 == "Addition");
+
+        DSString dummy4 = dummy2 + dummy1;
+        REQUIRE(dummy4 == "itionAdd");
+
+        DSString dummy5;
+
+        DSString dummy6 = dummy5 + test[2];
+        REQUIRE(dummy6 == nullptr);
+
+        DSString dummy7 = dummy1 + dummy5;
+        REQUIRE(dummy7 == dummy1);
+
+        DSString dummy8 = dummy6 + dummy5 + test[2];
+        REQUIRE(dummy8 == nullptr);
+
+        DSString dummy9 = test[2] + test[7];
+        REQUIRE(dummy9 == test[7]);
+
+        DSString dummy10 = test[3] + dummy5;
+        REQUIRE(dummy10 == "This is a c_string");
+
+        DSString dummy11 = test[0] + test[1] + test[3];
+        REQUIRE(dummy11 == "This is a stringThis is another stringThis is a c_string");
+
+        DSString dummy12 = test[0] + test[2] + test[3];
+        REQUIRE(dummy12 == "This is a stringThis is a c_string");
+
+        DSString dummy13 = test[0] + dummy6 + test[9];
+        REQUIRE(dummy13 == "This is a stringYet another string");
+    }
+
+    SECTION("substr() method") {
         DSString dummy1 = test[0].substr(0, 4);
         DSString dummy2 = test[0].substr(5, 2);
         DSString dummy3 = test[0].substr(10, 6);
