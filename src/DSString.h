@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <vector>
 
 class DSString {
 private:
@@ -138,7 +139,7 @@ public:
      *
      * @return int holding size of DSString
      */
-    int getSize() const;
+    int get_size() const;
 
     /** C-string method
      * Gets char* from DSString
@@ -147,6 +148,20 @@ public:
      * @return char* holding contents of DSString
      */
     char* c_str() const;
+
+    std::vector<DSString> tokenize();
+
+    void lowercase();
+
+    void string_cleaning();
+
+    bool wchar_check() const;
+
+    /** Check if DSString is a number
+     *
+     * @return bool determining if DSString is a number
+     */
+    bool is_num() const;
 
     friend std::ostream& operator<<(std::ostream& inOF, const DSString& dstr);
 };

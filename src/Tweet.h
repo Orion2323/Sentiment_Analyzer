@@ -25,11 +25,13 @@ public:
     explicit Tweet();
     explicit Tweet(const DSString& sentiment, const DSString& ID, const DSString& date, const DSString& username, const DSString& tweet);
 
-    DSString& getSentiment();
-    DSString& getID();
-    DSString& getDate();
-    DSString& getUsername();
-    DSString& getTweet();
+    DSString& get_sentiment();
+    DSString& get_ID();
+    DSString& get_date();
+    DSString& get_username();
+    DSString& get_tweet();
+
+    std::vector<DSString> get_tweet_words();
 
     friend std::ostream& operator<<(std::ostream& inOF, const Tweet& twt);
 };
