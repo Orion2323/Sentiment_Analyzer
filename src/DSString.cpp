@@ -307,6 +307,8 @@ void DSString::string_cleaning() {
             this->str = new char[1];
             this->str[0] = '\0';
         }
+
+        delete[] newStr;
     }
 }
 
