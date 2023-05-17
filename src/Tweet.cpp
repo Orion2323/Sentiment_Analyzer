@@ -11,24 +11,28 @@ Tweet::Tweet(const DSString& sentiment, const DSString& ID, const DSString& date
     this->tweet = tweet;
 }
 
-DSString& Tweet::getSentiment() {
+DSString& Tweet::get_sentiment() {
     return this->sentiment;
 }
 
-DSString& Tweet::getID() {
+DSString& Tweet::get_ID() {
     return this->ID;
 }
 
-DSString& Tweet::getDate() {
+DSString& Tweet::get_date() {
     return this->date;
 }
 
-DSString& Tweet::getUsername() {
+DSString& Tweet::get_username() {
     return this->username;
 }
 
-DSString& Tweet::getTweet() {
+DSString& Tweet::get_tweet() {
     return this->tweet;
+}
+
+std::vector<DSString> Tweet::get_tweet_words() {
+    return this->tweet.tokenize();
 }
 
 std::ostream& operator<<(std::ostream& inOF, const Tweet& twt) {

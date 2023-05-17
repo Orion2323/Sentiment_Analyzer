@@ -71,7 +71,7 @@ TEST_CASE("DSString class", "[DSString]") {
 
         REQUIRE(dummy1[0] == 'D');
         REQUIRE(dummy1[2] == 'S');
-        REQUIRE(dummy1[dummy1.getSize() - 1] == 'g');
+        REQUIRE(dummy1[dummy1.get_size() - 1] == 'g');
         REQUIRE(dummy1[4] == 'r');
         REQUIRE(dummy1[5] == 'i');
 
@@ -80,8 +80,8 @@ TEST_CASE("DSString class", "[DSString]") {
 
         DSString dummy3("A D S S T R I N G");
         REQUIRE(dummy3[1] == ' ');
-        REQUIRE(dummy3[dummy3.getSize() - 2] == ' ');
-        REQUIRE(dummy3[dummy3.getSize() - 5] == 'I');
+        REQUIRE(dummy3[dummy3.get_size() - 2] == ' ');
+        REQUIRE(dummy3[dummy3.get_size() - 5] == 'I');
         REQUIRE(dummy3[6] == 'S');
     }
 
