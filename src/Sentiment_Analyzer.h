@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <set>
 
 #include "Tweet.h"
 
@@ -16,6 +17,7 @@ private:
     std::map<DSString, int> classifier;
 
     std::vector<Tweet> tweetList;
+    std::set<Tweet> tweetSet;
 public:
     /** Constructors
      *
@@ -30,19 +32,25 @@ public:
     explicit Sentiment_Analyzer();
     explicit Sentiment_Analyzer(char* trainFile, char* testFile, char* ansKey, char* outFile);
 
-    /** Reading training file method
+    /** read_training_file method
      *
      * Reads contents of training file
      */
     void read_training_file();
 
-    /** Make word classfier method
+    /** reading_testing_file method
+     *
+     *  Reads contents of testing file
+     */
+    void read_testing_file();
+
+    /** make_classifier method
      *
      * Creates a map of DSStrings with assignment positive or negative values
      */
     void make_classifier();
 
-    /** Print classifier method
+    /** print_classifier method
      *
      * Prints classifier to terminal
      */

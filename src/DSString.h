@@ -10,15 +10,15 @@ class DSString {
 private:
     char* str;
 public:
-    /**  Constructors
+    /** Constructors
     *
-    *   first: default
+    * first: default
     *
-    *   second:
-    *   @params: str: char pointer
+    * second:
+    * @params: str: char pointer
     *
-    *   Third:
-    *   @param: str: string variable
+    * Third:
+    * @param: str: string variable
     */
     explicit DSString();
     explicit DSString(const char* str);
@@ -46,71 +46,83 @@ public:
     DSString& operator=(const DSString& dstr);
 
     /**  Overloaded equality methods
-    *   Returns a boolean if current DSString exactly like parameter variable
+    * Checks if DSString obj and other obj are the same
     *
-    *   first:
-    *   @param: str char pointer to compare
+    * first:
+    * @param: str char pointer to compare
+    * @return bool determining if DSString obj and char* are the same
     *
-    *   second:
-    *   @param: str string varible to compare
+    * second:
+    * @param: str string variable to compare
+    * @return bool determining if DSString obj and string are the same
     *
-    *   Third:
-    *   @param: dstr DSString variable to compare
+    * Third:
+    * @param: dstr DSString variable to compare
+    * @return bool determining if both DSString objs are the same
     */
     bool operator==(const char* str) const;
     bool operator==(const std::string& str) const;
     bool operator==(const DSString& dstr) const;
 
     /**  Overloaded non equality methods
-    *   Returns a boolean if current DSString is not exactly like parameter variable
+    * Checks if DSString obj and obj are NOT the same
     *
-    *   first:
-    *   @param: str char pointer to compare
+    * first:
+    * @param: str char pointer to compare
+    * @return bool determining if DSString obj and char* are NOT the same
     *
-    *   second:
-    *   @param: str string varible to compare
+    * second:
+    * @param: str string variable to compare
+    * @return bool determining if DSString obj and string are NOT the same
     *
-    *   Third:
-    *   @param: dstr DSString variable to compare
+    * Third:
+    * @param: dstr DSString variable to
+    * @return bool determining if both DSString objs are NOT the same
     */
     bool operator!=(const char* str) const;
     bool operator!=(const std::string& str) const;
     bool operator!=(const DSString& dstr) const;
 
     /**  Overloaded less than methods
-    *   Returns a boolean if current DSString is less than parameter variable
+    * Checks if DSString obj is less than obj
     *
-    *   first:
-    *   @param: str char pointer to compare
+    * first:
+    * @param: str char pointer to compare
+    * @return bool determining if DSString obj is less than char*
     *
-    *   second:
-    *   @param: str string varible to compare
+    * second:
+    * @param: str string variable to compare
+    * @return bool determining if DSString obj is less than string
     *
-    *   Third:
-    *   @param: dstr DSString variable to compare
+    * Third:
+    * @param: dstr DSString variable to
+    * @return bool determining if first DSString obj is less than second DSString obj
     */
     bool operator<(const char* str) const;
     bool operator<(const std::string& str) const;
     bool operator<(const DSString& dstr) const;
 
     /**  Overloaded greater than methods
-    *   Returns a boolean if current DSString is greater than parameter variable
+    * Checks if DSString obj is greater than obj
     *
-    *   first:
-    *   @param: str char pointer to compare
+    * first:
+    * @param: str char pointer to compare
+    * @return bool determining if DSString obj is greater than char*
     *
-    *   second:
-    *   @param: str string varible to compare
+    * second:
+    * @param: str string variable to compare
+    * @return bool determining if DSString obj is greater than string
     *
-    *   Third:
-    *   @param: dstr DSString variable to compare
+    * Third:
+    * @param: dstr DSString variable to
+    * @return bool determining if first DSString obj is greater than second DSString obj
     */
     bool operator>(const char* str) const;
     bool operator>(const std::string& str) const;
     bool operator>(const DSString& dstr) const;
 
     /** Overloaded subscript operator
-     * Returns a char from the DSString
+     * Gets a char from DSString
      *
      * @param index integer for element user wants to access from DSString
      * @return reference to char
@@ -118,7 +130,7 @@ public:
     char& operator[](const int& index) const;
 
     /** Overloaded plus operator
-     * Returns a new DSString that has been merged with another
+     * Adds two DSString objs together
      *
      * @param dstr secondary DSString
      * @return DSString that holds merged char*
@@ -135,7 +147,7 @@ public:
     DSString substr(const int& start, const int& numChars);
 
     /** Get Size method
-     * Returns size of DSString
+     * Gets size of DSString
      *
      * @return int holding size of DSString
      */
@@ -149,10 +161,21 @@ public:
      */
     char* c_str() const;
 
+    /** tokenize method
+     * Tokenizes a DSString and return a vector of DSStrings
+     *
+     * @return vector of DSString consisting of subwords within DSString obj
+     */
     std::vector<DSString> tokenize();
 
+    /** lowercase method
+     * Turns all chars in DSString into lowercase chars
+     */
     void lowercase();
 
+    /** string_cleaning method
+     * Takes out all non-letter chars from DSString
+     */
     void string_cleaning();
 
     bool wchar_check() const;
