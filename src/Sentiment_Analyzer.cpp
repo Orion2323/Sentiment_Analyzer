@@ -223,7 +223,7 @@ void Sentiment_Analyzer::read_testing_file() {
         delete[] dummy;
         delete[] username;
         delete[] tweet;
-        
+
         std::cout << this->prediction_map.size() << std::endl;
     } else {
         std::cout << "No testing file found!" << std::endl;

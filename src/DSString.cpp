@@ -32,8 +32,12 @@ DSString::~DSString() {
 
 // copy constuctor
 DSString::DSString(const DSString& dstr) {
-    this->str = new char[strlen(dstr.str) + 1];
-    strcpy(this->str, dstr.str);
+    if (dstr.str != nullptr) {
+        this->str = new char[strlen(dstr.str) + 1];
+        strcpy(this->str, dstr.str);
+    } else {
+        this->str = nullptr;
+    }
 }
 
 // assignment operator
