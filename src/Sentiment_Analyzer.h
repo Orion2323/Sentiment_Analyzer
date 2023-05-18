@@ -15,9 +15,10 @@ private:
     char* outFile;
 
     std::map<DSString, int> classifier;
+    std::map<Tweet, int> prediction_map;
 
     std::vector<Tweet> tweetList;
-    std::set<Tweet> tweetSet;
+    std::vector<std::pair<DSString, DSString>> answers;
 public:
     /** Constructors
      *
@@ -38,17 +39,38 @@ public:
      */
     void read_training_file();
 
+    /** make_classifier method
+     *
+     * Creates a map of DSStrings with assignment positive or negative values
+     */
+    void make_classifier();
+
+    /** classifier_check method
+     * Checks if DSString should go in classifier
+     *
+     * @param dstr DSString to be checked
+     * @return bool determining if DSString should be included in classifier
+     */
+    bool classifier_check(DSString& dstr);
+
     /** reading_testing_file method
      *
      *  Reads contents of testing file
      */
     void read_testing_file();
 
-    /** make_classifier method
+    /** make_predictions method
      *
-     * Creates a map of DSStrings with assignment positive or negative values
+     * Make predictions from testing dataset
+     *
      */
-    void make_classifier();
+    void make_predictions();
+
+    /** read_answer_key_file method
+     *
+     * Read contents of answer key file
+     */
+    void read_answer_key_file();
 
     /** print_classifier method
      *

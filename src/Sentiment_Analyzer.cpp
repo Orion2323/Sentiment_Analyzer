@@ -1,6 +1,5 @@
 #include "Sentiment_Analyzer.h"
 
-// default constructor
 Sentiment_Analyzer::Sentiment_Analyzer() {
     this->trainFile = nullptr;
     this->testFile = nullptr;
@@ -24,7 +23,10 @@ void Sentiment_Analyzer::read_training_file() {
 
     // open training file
     std::ifstream inFS(this->trainFile);
+
+    // check if file is open
     if (inFS.is_open()) {
+        std::cout << "Reading training file..." << std::endl;
         char* headers = new char[256];
         char* sentiment = new char[4];
         char* ID = new char[12];
@@ -34,6 +36,7 @@ void Sentiment_Analyzer::read_training_file() {
         char* tweet = new char[500];
 
         inFS.getline(headers, 256, '\n');
+
         // iterate through file lines
         while(!inFS.eof()) {
             inFS.getline(sentiment, 4, ',');
@@ -70,78 +73,27 @@ void Sentiment_Analyzer::read_training_file() {
 }
 
 void Sentiment_Analyzer::make_classifier() {
+    std::cout << "Making classifier..." << std::endl;
     // iterate through tweet objects
-    std::vector<int> errCnt(6, 0);
-
     for (Tweet& t : this->tweetList) {
-        std::vector<DSString> tweetWords = t.get_tweet_words();
+        std::vector<DSString> tweetWords = t.get_tweet().tokenize();
 
         // iterate through each word in tweet
         for (DSString& str : tweetWords) {
-            // check if DSString size is less than 3
-            if (str.get_size() < 4) {
-                continue;
+            if (this->classifier_check(str)) {
+                // check sentiment value of tweet
+                int senVal = -1;
+                if (t.get_sentiment() == "4") {
+                    senVal = 1;
+                }
+
+                // check if DSString already in classifier
+                if (!this->classifier.count(str)) {
+                    this->classifier.insert({str, 0});
+                }
+
+                this->classifier[str] += senVal;
             }
-
-            // check if DSString is a mention
-            if (str[0] == '@') {
-                continue;
-            }
-
-            // check if DSString is a website
-            if (str[0] == 'h' && str[1] == 't' && str[3] == 'p') {
-                continue;
-            } else if (str[str.get_size()  - 3] == 'c' && str[str.get_size() - 2] == 'o' && str[str.get_size() - 1] == 'm') {
-                continue;
-            } else if (str[0] == 'w' && str[1] == 'w' && str[2] == 'w') {
-                continue;
-            }
-
-            // check for wchars
-            if (str.wchar_check()) {
-                continue;
-            }
-
-            // check if DSString is a number
-            if (str.is_num()) {
-                continue;
-            }
-
-           // clean up DSString
-            str.lowercase();
-            str.string_cleaning();
-
-            // check size of DSString
-            if (str.get_size() < 4) {
-                continue;
-            }
-
-            // check if DSString is a website
-            if (str[0] == 'h' && str[1] == 't' && str[3] == 'p') {
-                continue;
-            } else if (str[str.get_size()  - 3] == 'c' && str[str.get_size() - 2] == 'o' && str[str.get_size() - 1] == 'm') {
-                continue;
-            } else if (str[0] == 'w' && str[1] == 'w' && str[2] == 'w') {
-                continue;
-            }
-
-            // check if DSString is a number
-            if (str.is_num()) {
-                continue;
-            }
-
-            // check sentiment value of tweet
-            int senVal = -1;
-            if (t.get_sentiment() == "4") {
-                senVal = 1;
-            }
-
-            // check if DSString already in classifier
-            if (!this->classifier.count(str)) {
-                this->classifier.insert({str, 0});
-            }
-
-            this->classifier[str] += senVal;
         }
     }
 
@@ -163,12 +115,182 @@ void Sentiment_Analyzer::make_classifier() {
         this->classifier.erase(str);
     }
 
-    // print classifier
-    for (std::pair<DSString,int> p : this->classifier) {
-        if (p.first[0] == 'b') {
-            std::cout << p.first << " " << p.second << std::endl;
-        }
+    // clear tweetList
+    this->tweetList.clear();
+}
+
+bool Sentiment_Analyzer::classifier_check(DSString &dstr) {
+    // check if DSString size is less than 3
+    if (dstr.get_size() < 4) {
+        return false;
     }
 
-    std::cout << this->classifier.size() << std::endl;
+    // check if DSString is a mention
+    if (dstr[0] == '@') {
+        return false;
+    }
+
+    // check if DSString is a website
+    if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
+        return false;
+    } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
+        return false;
+    } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
+        return false;
+    }
+
+    // check for wchars
+    if (dstr.wchar_check()) {
+        return false;
+    }
+
+    // check if DSString is a number
+    if (dstr.is_num()) {
+        return false;
+    }
+
+    // clean up DSString
+    dstr.lowercase();
+    dstr.string_cleaning();
+
+    // check size of DSString
+    if (dstr.get_size() < 4) {
+        return false;
+    }
+
+    // check if DSString is a website
+    if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
+        return false;
+    } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
+        return false;
+    } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
+        return false;
+    }
+
+    // check if DSString is a number
+    if (dstr.is_num()) {
+        return false;
+    }
+
+    return true;
+}
+
+void Sentiment_Analyzer::read_testing_file() {
+    // check if testing file char* is null
+    if (this->testFile == nullptr) {
+        std::cout << "No testing file was passed!" << std::endl;
+        return;
+    }
+
+    // check if testing file is open
+    std::ifstream inFS(this->testFile);
+    if (inFS.is_open()) {
+        std::cout << "Reading testing file..." << std::endl;
+        char* header = new char[256];
+        char* ID = new char[12];
+        char* date = new char[30];
+        char* dummy = new char[10];
+        char* username = new char[20];
+        char* tweet = new char[500];
+
+        // get headers and iterate through file lines
+        inFS.getline(header, 256, '\n');
+        while (!inFS.eof()) {
+            inFS.getline(ID, 12, ',');
+            DSString idString(ID);
+
+            inFS.getline(date, 30, ',');
+            DSString dateString(date);
+
+            inFS.getline(dummy, 10, ',');
+
+            inFS.getline(username, 20, ',');
+            DSString userString(username);
+
+            inFS.getline(tweet, 500, '\n');
+            DSString tweetString(tweet);
+
+            DSString dummy2("NULL");
+            Tweet newTweet(dummy2, idString, dateString, userString, tweetString);
+
+            // add Tweet obj to prediction map
+            this->prediction_map.insert({newTweet, -1});
+        }
+
+        delete[] header;
+        delete[] ID;
+        delete[] date;
+        delete[] dummy;
+        delete[] username;
+        delete[] tweet;
+        
+        std::cout << this->prediction_map.size() << std::endl;
+    } else {
+        std::cout << "No testing file found!" << std::endl;
+    }
+}
+
+void Sentiment_Analyzer::make_predictions() {
+    std::cout << "Making predictions..." << std::endl;
+
+    // iterate through each tweet
+    for (std::pair<Tweet,int> p : this->prediction_map) {
+        std::vector<DSString> tweetWords = p.first.get_tweet().tokenize();
+
+        // iterate through each word in tweet
+        int sum = 0;
+        for (DSString& dstr : tweetWords) {
+            // clean up string and check if it exists in classifier
+            if (this->classifier_check(dstr) && this->classifier.count(dstr)) {
+                sum += this->classifier[dstr];
+            }
+        }
+
+        // check if sum is positive or negative
+        if (this->prediction_map.count(p.first)) {
+            if (sum > 0) {
+                this->prediction_map[p.first] = 4;
+            } else {
+                this->prediction_map[p.first] = 0;
+            }
+        }
+    }
+}
+
+void Sentiment_Analyzer::read_answer_key_file() {
+    // check if testing file char* is null
+    if (this->ansKey == nullptr) {
+        std::cout << "No answer key file was passed!" << std::endl;
+        return;
+    }
+
+    std::ifstream inFS(this->ansKey);
+    if (inFS.is_open()) {
+        std::cout << "Reading answer key file..." << std::endl;
+
+
+        char* headers = new char[256];
+        char* sentiment = new char[4];
+        char* ID = new char[12];
+
+        inFS.getline(headers, 256, '\n');
+        while (!inFS.eof()) {
+            inFS.getline(sentiment, 4, ',');
+            DSString sentimentString(sentiment);
+
+            inFS.getline(ID, 12, '\n');
+            DSString idString(ID);
+
+            std::pair<DSString, DSString> newPair(sentimentString, idString);
+            this->answers.push_back(newPair);
+        }
+    } else {
+        std::cout << "No answer key file found!" << std::endl;
+    }
+}
+
+void Sentiment_Analyzer::print_classifier() {
+    for (std::pair<DSString,int> p : this->classifier) {
+        std::cout << p.first << " " << p.second << std::endl;
+    }
 }
