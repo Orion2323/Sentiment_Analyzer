@@ -75,10 +75,6 @@ void Tweet::set_tweet(const DSString& tweet) {
     this->tweet = tweet;
 }
 
-std::vector<DSString> Tweet::get_tweet_words() {
-    return this->tweet.tokenize();
-}
-
 std::ostream& operator<<(std::ostream& inOF, const Tweet& twt) {
     inOF << twt.sentiment << std::endl;
     inOF << twt.ID << std::endl;

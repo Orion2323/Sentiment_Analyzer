@@ -119,13 +119,6 @@ public:
     DSString& get_tweet();
     void set_tweet(const DSString& tweet);
 
-    /** Get Tweet Words method
-     * Tokenizes tweet DSString and returns a vector of DSStrings
-     *
-     * @return a vector of DSStrings
-     */
-    std::vector<DSString> get_tweet_words();
-
     friend std::ostream& operator<<(std::ostream& inOF, const Tweet& twt);
 };
 
