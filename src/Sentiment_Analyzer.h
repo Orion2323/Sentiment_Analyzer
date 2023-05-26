@@ -1,9 +1,8 @@
 #ifndef SENTIMENT_ANALYZER_SENTIMENT_ANALYZER_H
 #define SENTIMENT_ANALYZER_SENTIMENT_ANALYZER_H
 
-#include <iostream>
 #include <map>
-#include <set>
+#include <cmath>
 
 #include "Tweet.h"
 
@@ -14,7 +13,7 @@ private:
     char* ansKey;
     char* outFile;
 
-    std::map<DSString, int> classifier;
+    std::map<DSString, double> classifier;
     std::map<Tweet, DSString> prediction_map;
 
     std::vector<Tweet> tweetList;

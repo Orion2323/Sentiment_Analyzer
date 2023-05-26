@@ -290,11 +290,9 @@ void DSString::string_cleaning() {
     if (this->str != nullptr) {
         int counter = 0;
         char* newStr = new char[strlen(this->str) + 1];
-        char c = '!';
 
         for (int i = 0; i < strlen(this->str); i++) {
-            if (isalpha(this->str[i]) && this->str[i] != c) {
-                c = this->str[i];
+            if (isalpha(this->str[i])) {
                 newStr[counter] = this->str[i];
                 counter++;
             }

@@ -103,12 +103,16 @@ void Sentiment_Analyzer::make_classifier() {
 
     // binerize words by value
     std::vector<DSString> delWords;
-    std::map<DSString, int>::iterator it;
+    std::map<DSString, double>::iterator it;
     for (it = this->classifier.begin(); it != this->classifier.end(); it++) {
-        if (it->second > 0) {
+        if (it->second == 1) {
             it->second = 1;
-        } else if (it->second < 0) {
+        } else if (it->second > 1) {
+            it->second = log2(it->second);
+        } else if (it->second == -1) {
             it->second = -1;
+        } else if (it->second < -1) {
+            it->second = log2(-1 * it->second) * -1;
         } else {
             delWords.push_back(it->first);
         }
@@ -125,7 +129,7 @@ void Sentiment_Analyzer::make_classifier() {
 
 bool Sentiment_Analyzer::classifier_check(DSString& dstr) {
     // check if DSString size is less than 3
-    if (dstr.get_size() < 4) {
+    if (dstr.get_size() < 3) {
         return false;
     }
 
@@ -135,12 +139,14 @@ bool Sentiment_Analyzer::classifier_check(DSString& dstr) {
     }
 
     // check if DSString is a website
-    if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
-        return false;
-    } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
-        return false;
-    } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
-        return false;
+    if (dstr.get_size() > 3) {
+        if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
+            return false;
+        } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
+            return false;
+        } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
+            return false;
+        }
     }
 
     // check for wchars
@@ -158,17 +164,19 @@ bool Sentiment_Analyzer::classifier_check(DSString& dstr) {
     dstr.string_cleaning();
 
     // check size of DSString
-    if (dstr.get_size() < 4) {
+    if (dstr.get_size() < 3) {
         return false;
     }
 
     // check if DSString is a website
-    if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
-        return false;
-    } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
-        return false;
-    } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
-        return false;
+    if (dstr.get_size() > 3) {
+        if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
+            return false;
+        } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
+            return false;
+        } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
+            return false;
+        }
     }
 
     // check if DSString is a number
@@ -259,13 +267,6 @@ void Sentiment_Analyzer::make_predictions() {
             }
         }
     }
-
-    /*
-    for (const auto& pair : this->prediction_map) {
-        std::cout << "Sentiment: " << pair.second << std::endl;
-        std::cout << pair.first << std::endl;
-    }
-     */
 }
 
 void Sentiment_Analyzer::read_answer_key_file() {
