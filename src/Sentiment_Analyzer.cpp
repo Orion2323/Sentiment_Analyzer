@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "Sentiment_Analyzer.h"
 
 Sentiment_Analyzer::Sentiment_Analyzer() {
@@ -49,6 +50,7 @@ void Sentiment_Analyzer::read_training_file() {
             DSString dateString(date);
 
             inFS.getline(dummy, 10, ',');
+
             inFS.getline(username, 20, ',');
             DSString nameString(username);
 
@@ -70,6 +72,8 @@ void Sentiment_Analyzer::read_training_file() {
     } else {
         std::cout << "No training file found!" << std::endl;
     }
+
+    inFS.close();
 }
 
 void Sentiment_Analyzer::make_classifier() {
@@ -119,7 +123,7 @@ void Sentiment_Analyzer::make_classifier() {
     this->tweetList.clear();
 }
 
-bool Sentiment_Analyzer::classifier_check(DSString &dstr) {
+bool Sentiment_Analyzer::classifier_check(DSString& dstr) {
     // check if DSString size is less than 3
     if (dstr.get_size() < 4) {
         return false;
@@ -214,7 +218,7 @@ void Sentiment_Analyzer::read_testing_file() {
             Tweet newTweet(dummy2, idString, dateString, userString, tweetString);
 
             // add Tweet obj to prediction map
-            this->prediction_map.insert({newTweet, -1});
+            this->prediction_map.insert({newTweet, DSString("-1")});
         }
 
         delete[] header;
@@ -223,18 +227,18 @@ void Sentiment_Analyzer::read_testing_file() {
         delete[] dummy;
         delete[] username;
         delete[] tweet;
-
-        std::cout << this->prediction_map.size() << std::endl;
     } else {
         std::cout << "No testing file found!" << std::endl;
     }
+
+    inFS.close();
 }
 
 void Sentiment_Analyzer::make_predictions() {
     std::cout << "Making predictions..." << std::endl;
 
     // iterate through each tweet
-    for (std::pair<Tweet,int> p : this->prediction_map) {
+    for (std::pair<Tweet,DSString> p : this->prediction_map) {
         std::vector<DSString> tweetWords = p.first.get_tweet().tokenize();
 
         // iterate through each word in tweet
@@ -249,12 +253,19 @@ void Sentiment_Analyzer::make_predictions() {
         // check if sum is positive or negative
         if (this->prediction_map.count(p.first)) {
             if (sum > 0) {
-                this->prediction_map[p.first] = 4;
+                this->prediction_map[p.first] = DSString("4");
             } else {
-                this->prediction_map[p.first] = 0;
+                this->prediction_map[p.first] = DSString("0");
             }
         }
     }
+
+    /*
+    for (const auto& pair : this->prediction_map) {
+        std::cout << "Sentiment: " << pair.second << std::endl;
+        std::cout << pair.first << std::endl;
+    }
+     */
 }
 
 void Sentiment_Analyzer::read_answer_key_file() {
@@ -264,10 +275,10 @@ void Sentiment_Analyzer::read_answer_key_file() {
         return;
     }
 
+    // check if file is open
     std::ifstream inFS(this->ansKey);
     if (inFS.is_open()) {
         std::cout << "Reading answer key file..." << std::endl;
-
 
         char* headers = new char[256];
         char* sentiment = new char[4];
@@ -281,16 +292,40 @@ void Sentiment_Analyzer::read_answer_key_file() {
             inFS.getline(ID, 12, '\n');
             DSString idString(ID);
 
-            std::pair<DSString, DSString> newPair(sentimentString, idString);
+            std::pair<DSString, DSString> newPair(idString, sentimentString);
             this->answers.push_back(newPair);
         }
     } else {
         std::cout << "No answer key file found!" << std::endl;
     }
+
+    inFS.close();
 }
 
-void Sentiment_Analyzer::print_classifier() {
-    for (std::pair<DSString,int> p : this->classifier) {
-        std::cout << p.first << " " << p.second << std::endl;
+void Sentiment_Analyzer::accuracy_check() {
+    std::cout << "Calculating accuracy..." << std::endl;
+    double correct = 0;
+
+    for (const std::pair<DSString, DSString>& p : this->answers) {
+        DSString dummy("NULL");
+        Tweet twt(p.second, p.first, dummy, dummy, dummy);
+
+        if (this->prediction_map.count(twt)) {
+            if (this->prediction_map[twt] == p.second) {
+                correct++;
+            } else {
+                this->wrongTweets.push_back(p.first);
+            }
+        }
+    }
+
+    float accuracy = correct/10000;
+    std::cout << "\n" << std::setw(2) << accuracy << std::endl;
+    this->print_wrong_predictions();
+}
+
+void Sentiment_Analyzer::print_wrong_predictions() {
+    for (const DSString& id: this->wrongTweets) {
+        std::cout << id << std::endl;
     }
 }

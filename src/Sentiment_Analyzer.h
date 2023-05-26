@@ -15,10 +15,11 @@ private:
     char* outFile;
 
     std::map<DSString, int> classifier;
-    std::map<Tweet, int> prediction_map;
+    std::map<Tweet, DSString> prediction_map;
 
     std::vector<Tweet> tweetList;
     std::vector<std::pair<DSString, DSString>> answers;
+    std::vector<DSString> wrongTweets;
 public:
     /** Constructors
      *
@@ -72,11 +73,22 @@ public:
      */
     void read_answer_key_file();
 
+    /** accuracy_check method
+     *
+     * Calculate accuracy of sentiment analyzer program
+     */
+    void accuracy_check();
+
     /** print_classifier method
      *
      * Prints classifier to terminal
      */
-    void print_classifier();
+
+    /** print_wrong_predictions method
+     *
+     * Prints the IDs of tweets sentiment analyzer predicted wrong
+     */
+    void print_wrong_predictions();
 };
 
 #endif //SENTIMENT_ANALYZER_SENTIMENT_ANALYZER_H

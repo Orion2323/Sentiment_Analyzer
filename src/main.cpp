@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char** argv) {
     // check number of program arguments
     if (argc > 1) {
-        Sentiment_Analyzer p1(argv[1], argv[2], nullptr, nullptr);
+        Sentiment_Analyzer p1(argv[1], argv[2], argv[3], nullptr);
 
         // training phase
         p1.read_training_file();
@@ -16,6 +16,11 @@ int main(int argc, char** argv) {
 
         // testing phase
         p1.read_testing_file();
+        p1.make_predictions();
+
+        // accuracy phase
+        p1.read_answer_key_file();
+        p1.accuracy_check();
 
     } else {
         Catch::Session().run();
