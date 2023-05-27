@@ -78,16 +78,12 @@ public:
      */
     void accuracy_check();
 
-    /** print_classifier method
-     *
-     * Prints classifier to terminal
-     */
-
     /** print_wrong_predictions method
-     *
      * Prints the IDs of tweets sentiment analyzer predicted wrong
+     *
+     * @param accuracy float that holds the accuracy of sentiment analyzer
      */
-    void print_wrong_predictions();
+    void print_wrong_predictions(const float& accuracy);
 };
 
 #endif //SENTIMENT_ANALYZER_SENTIMENT_ANALYZER_H

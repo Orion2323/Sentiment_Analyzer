@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char** argv) {
     // check number of program arguments
     if (argc > 1) {
-        Sentiment_Analyzer p1(argv[1], argv[2], argv[3], nullptr);
+        Sentiment_Analyzer p1(argv[1], argv[2], argv[3], argv[4]);
 
         // training phase
         p1.read_training_file();

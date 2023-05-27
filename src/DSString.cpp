@@ -292,12 +292,14 @@ void DSString::string_cleaning() {
         char* newStr = new char[strlen(this->str) + 1];
 
         for (int i = 0; i < strlen(this->str); i++) {
+            // check if char is a letter
             if (isalpha(this->str[i])) {
                 newStr[counter] = this->str[i];
                 counter++;
             }
         }
 
+        // check size of newStr
         if (strlen(newStr) > 0) {
             newStr[counter] = '\0';
 
@@ -330,6 +332,7 @@ bool DSString::wchar_check() const {
 }
 
 bool DSString::is_num() const {
+    // check if DSString is null
     if (this->str == nullptr) {
         return false;
     } else {

@@ -101,7 +101,7 @@ void Sentiment_Analyzer::make_classifier() {
         }
     }
 
-    // binerize words by value
+    // standardize sentiment of words
     std::vector<DSString> delWords;
     std::map<DSString, double>::iterator it;
     for (it = this->classifier.begin(); it != this->classifier.end(); it++) {
@@ -144,6 +144,8 @@ bool Sentiment_Analyzer::classifier_check(DSString& dstr) {
             return false;
         } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
             return false;
+        } else if (dstr[dstr.get_size()  - 4] == 'c' && dstr[dstr.get_size() - 3] == 'o' && dstr[dstr.get_size() - 2] == 'm' && dstr[dstr.get_size() - 1] == '.') {
+            return false;
         } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
             return false;
         }
@@ -173,6 +175,8 @@ bool Sentiment_Analyzer::classifier_check(DSString& dstr) {
         if (dstr[0] == 'h' && dstr[1] == 't' && dstr[3] == 'p') {
             return false;
         } else if (dstr[dstr.get_size()  - 3] == 'c' && dstr[dstr.get_size() - 2] == 'o' && dstr[dstr.get_size() - 1] == 'm') {
+            return false;
+        } else if (dstr[dstr.get_size()  - 4] == 'c' && dstr[dstr.get_size() - 3] == 'o' && dstr[dstr.get_size() - 2] == 'm' && dstr[dstr.get_size() - 1] == '.') {
             return false;
         } else if (dstr[0] == 'w' && dstr[1] == 'w' && dstr[2] == 'w') {
             return false;
@@ -321,12 +325,29 @@ void Sentiment_Analyzer::accuracy_check() {
     }
 
     float accuracy = correct/10000;
-    std::cout << "\n" << std::setw(2) << accuracy << std::endl;
-    this->print_wrong_predictions();
+    this->print_wrong_predictions(accuracy);
 }
 
-void Sentiment_Analyzer::print_wrong_predictions() {
-    for (const DSString& id: this->wrongTweets) {
-        std::cout << id << std::endl;
+void Sentiment_Analyzer::print_wrong_predictions(const float& accuracy) {
+    // check if output file was passed in
+    if (this->outFile == nullptr) {
+        std::cout << "Output file path was not passed in!" << std::endl;
+        return;
+    }
+
+    // check if file path is open
+    std::ofstream inOF(this->outFile);
+    if (inOF.is_open()) {
+        // print accuracy
+        //std::cout << "\n" << std::setw(3) << accuracy << std::endl;
+        inOF << std::setw(3) << accuracy << std::endl;
+
+        // print ids of wrongly predicted tweets
+        for (const DSString& id: this->wrongTweets) {
+            //std::cout << id << std::endl;
+            inOF << id << std::endl;
+        }
+    } else {
+        std::cout << "Output file not found!" << std::endl;
     }
 }
