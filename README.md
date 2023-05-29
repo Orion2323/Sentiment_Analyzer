@@ -5,6 +5,7 @@ This repository holds a sentiment analyzer project, the first project given in t
 Structures class of Fall 2020 at SMU. I redid the project, still limited by the original rules and constraints
 when the project was first assigned. 
 
+## Program Structure
 Given several files, the program runs in three phases:
 <br><br>
 **Training phase**:
